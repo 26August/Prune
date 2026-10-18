@@ -25,8 +25,9 @@ fun PackageListScreen(onExecute: ()->Unit) {
     val levels = listOf("safe","optional","caution")
     val curLevel = levels[tab]
     val filtered = AppState.matched.filter { e ->
-        val status = AppState.scanMap[e.id]
-        status != null && (showRemoved || status != PackageStatus.uninstalled) && (query.isBlank() || e.id.contains(query, true) || e.name.contains(query, true)) && e.level == curLevel
+        val status = AppState.scanMap[e.id] ?: return@filter false
+        val visibleByRemoved = if (showRemoved) status == PackageStatus.uninstalled else status != PackageStatus.uninstalled
+        visibleByRemoved && (query.isBlank() || e.id.contains(query, true) || e.name.contains(query, true)) && e.level == curLevel
     }.let { list ->
         if (curLevel == "caution" && !showCaution.value) emptyList() else list
     }
