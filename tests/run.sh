@@ -54,7 +54,7 @@ exit 0
 CMD
 cat > "$TMP/bin/id" <<'ID'
 #!/bin/sh
-echo "uid=0(root) gid=0(root)"
+if [ "$1" = "-u" ]; then echo 0; else echo "uid=0(root) gid=0(root)"; fi
 ID
 chmod +x "$TMP/bin/"*
 
