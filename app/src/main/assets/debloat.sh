@@ -69,8 +69,10 @@ do_backup() {
   fi
   echo "INFO|backup|$bk"
   n=20
+  # shellcheck disable=SC2012
   count="$(ls -1 "$WORKDIR"/backup_*.txt 2>/dev/null | wc -l | tr -d ' ')"
   if [ "$count" -gt "$n" ]; then
+    # shellcheck disable=SC2012
     ls -1t "$WORKDIR"/backup_*.txt 2>/dev/null | tail -n +"$((n+1))" | while IFS= read -r f; do rm -f "$f"; done
   fi
 }
@@ -202,7 +204,7 @@ process_list() {
         out1="$(pm enable "$pkg" 2>&1)"; rc1=$?
         out2="$(cmd package install-existing --user 0 "$pkg" 2>&1)"; rc2=$?
         if [ $rc2 -eq 0 ] || [ $rc1 -eq 0 ]; then log_line "OK|$pkg|restored"; ok=$((ok+1))
-        else log_line "FAIL|$pkg|$out2"; fail=$((fail+1)); fi
+        else log_line "FAIL|$pkg|$out1; $out2"; fail=$((fail+1)); fi
         ;;
     esac
   done < "$LIST_FILE"
