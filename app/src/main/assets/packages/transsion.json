@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "group": "transsion",
+  "matchers": { "manufacturer": ["infinix", "tecno", "itel", "transsion"], "brand": ["infinix", "tecno", "itel"] },
+  "packages": [
+    { "id": "com.transsion.carlcare", "name": "Carlcare", "level": "optional", "category": "store", "description": "Carlcare service.", "impact": "Carlcare removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.transsion.phonemaster", "name": "Phone Master", "level": "optional", "category": "store", "description": "Phone Master cleaner.", "impact": "Cleaner removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.infinix.xshare", "name": "XShare", "level": "optional", "category": "store", "description": "XShare transfer.", "impact": "XShare removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.afmobi.boomplayer", "name": "Boomplay", "level": "optional", "category": "media", "description": "Boomplay music.", "impact": "Boomplay removed.", "actions": ["disable", "uninstall"], "verified": false }
+  ]
+}

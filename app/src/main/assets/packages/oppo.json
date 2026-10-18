@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "group": "oppo",
+  "matchers": { "manufacturer": ["oppo", "realme"], "brand": ["oppo", "realme"] },
+  "packages": [
+    { "id": "com.heytap.browser", "name": "Browser", "level": "optional", "category": "browser", "description": "HeyTap Browser.", "impact": "Browser removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.heytap.music", "name": "Music", "level": "optional", "category": "media", "description": "HeyTap Music.", "impact": "Music app removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.heytap.cloud", "name": "HeyTap Cloud", "level": "optional", "category": "store", "description": "Cloud service.", "impact": "Cloud sync disabled.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.nearme.gamecenter", "name": "Game Center", "level": "optional", "category": "game", "description": "Game Center.", "impact": "Game Center removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.coloros.video", "name": "Video", "level": "optional", "category": "media", "description": "ColorOS Video.", "impact": "Video app removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.heytap.market", "name": "App Market", "level": "caution", "category": "store", "description": "App Market store.", "impact": "App updates via store stop.", "actions": ["disable", "uninstall"], "verified": false }
+  ]
+}

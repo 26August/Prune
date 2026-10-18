@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "group": "common",
+  "matchers": { "manufacturer": [], "brand": [] },
+  "packages": [
+    { "id": "com.facebook.katana", "name": "Facebook", "level": "optional", "category": "social", "description": "Facebook app.", "impact": "Facebook removed for user 0.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.facebook.orca", "name": "Messenger", "level": "optional", "category": "social", "description": "Facebook Messenger.", "impact": "Messenger removed for user 0.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.google.android.apps.tachyon", "name": "Google Meet", "level": "optional", "category": "media", "description": "Google Meet.", "impact": "Meet removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.google.android.videos", "name": "Google TV", "level": "optional", "category": "media", "description": "Google TV / Play Movies.", "impact": "Google TV removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.google.android.apps.youtube.music", "name": "YouTube Music", "level": "optional", "category": "media", "description": "YouTube Music.", "impact": "YouTube Music removed.", "actions": ["disable", "uninstall"], "verified": false }
+  ]
+}

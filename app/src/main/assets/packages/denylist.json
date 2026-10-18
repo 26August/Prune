@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "group": "denylist",
+  "patterns": [
+    "android",
+    "com.android.systemui",
+    "com.android.phone",
+    "com.android.settings",
+    "com.android.providers.*",
+    "com.android.networkstack",
+    "com.google.android.gms",
+    "com.google.android.gsf",
+    "com.android.packageinstaller",
+    "com.google.android.packageinstaller",
+    "com.android.permissioncontroller",
+    "com.google.android.permissioncontroller",
+    "com.qualcomm.*",
+    "com.mediatek.*"
+  ]
+}

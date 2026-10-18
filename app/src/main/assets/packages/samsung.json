@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "group": "samsung",
+  "matchers": { "manufacturer": ["samsung"], "brand": ["samsung"] },
+  "packages": [
+    { "id": "com.facebook.appmanager", "name": "Facebook App Manager", "level": "safe", "category": "social", "description": "Facebook app manager stub.", "impact": "Stub removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.facebook.services", "name": "Facebook Services", "level": "safe", "category": "social", "description": "Facebook services stub.", "impact": "Stub removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.facebook.system", "name": "Facebook App Installer", "level": "safe", "category": "social", "description": "Facebook installer stub.", "impact": "Stub removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.samsung.android.bixby.agent", "name": "Bixby", "level": "optional", "category": "assistant", "description": "Bixby assistant.", "impact": "Bixby removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.samsung.android.visionintelligence", "name": "Bixby Vision", "level": "optional", "category": "assistant", "description": "Bixby Vision.", "impact": "Vision features removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.samsung.android.app.spage", "name": "Samsung Free", "level": "optional", "category": "media", "description": "Samsung Free feed.", "impact": "Feed removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.samsung.android.game.gamehome", "name": "Game Launcher", "level": "optional", "category": "game", "description": "Game Launcher.", "impact": "Game Launcher removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.samsung.android.arzone", "name": "AR Zone", "level": "optional", "category": "media", "description": "AR Zone.", "impact": "AR Zone removed.", "actions": ["disable", "uninstall"], "verified": false }
+  ]
+}

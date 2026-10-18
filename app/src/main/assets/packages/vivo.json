@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "group": "vivo",
+  "matchers": { "manufacturer": ["vivo"], "brand": ["vivo", "iqoo"] },
+  "packages": [
+    { "id": "com.vivo.browser", "name": "Browser", "level": "optional", "category": "browser", "description": "vivo Browser.", "impact": "Browser removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.vivo.game", "name": "Game Center", "level": "optional", "category": "game", "description": "Game Center.", "impact": "Game Center removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.vivo.space", "name": "vivo Space", "level": "optional", "category": "store", "description": "vivo Space.", "impact": "vivo Space removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.vivo.appstore", "name": "V-Appstore", "level": "caution", "category": "store", "description": "V-Appstore.", "impact": "App updates via store stop.", "actions": ["disable", "uninstall"], "verified": false }
+  ]
+}

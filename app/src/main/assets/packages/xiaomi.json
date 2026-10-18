@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "group": "xiaomi",
+  "matchers": { "manufacturer": ["xiaomi"], "brand": ["xiaomi", "redmi", "poco"] },
+  "packages": [
+    { "id": "com.miui.msa.global", "name": "MSA (Ad Service)", "level": "safe", "category": "ads", "description": "System ad service.", "impact": "System ads stop; core functions unchanged.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.miui.analytics", "name": "Analytics", "level": "safe", "category": "telemetry", "description": "System analytics / telemetry.", "impact": "Telemetry stops.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.miui.systemAdSolution", "name": "System Ad Solution", "level": "safe", "category": "ads", "description": "System ad component.", "impact": "Ads removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.miui.yellowpage", "name": "Yellow Pages", "level": "safe", "category": "ads", "description": "Yellow Pages service.", "impact": "Yellow Pages removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.miui.bugreport", "name": "Bug Report", "level": "safe", "category": "telemetry", "description": "Bug report tool.", "impact": "Bug reporting disabled.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.miui.hybrid", "name": "Quick Apps", "level": "safe", "category": "store", "description": "Quick Apps / Hybrid.", "impact": "Quick Apps removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.xiaomi.mipicks", "name": "GetApps", "level": "optional", "category": "store", "description": "Xiaomi app store.", "impact": "Store removed; sideload still works.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.mi.globalbrowser", "name": "Mi Browser", "level": "optional", "category": "browser", "description": "Mi Browser.", "impact": "Browser removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.miui.player", "name": "Mi Music", "level": "optional", "category": "media", "description": "Mi Music.", "impact": "Music app removed.", "actions": ["disable", "uninstall"], "verified": false },
+    { "id": "com.miui.video", "name": "Mi Video", "level": "optional", "category": "media", "description": "Mi Video.", "impact": "Video app removed.", "actions": ["disable", "uninstall"], "verified": false }
+  ]
+}
