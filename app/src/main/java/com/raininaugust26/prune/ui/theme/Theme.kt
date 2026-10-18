@@ -11,3 +11,13 @@ private val Dark = darkColorScheme(primary = androidx.compose.ui.graphics.Color(
 fun PruneTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable ()->Unit) {
     MaterialTheme(colorScheme = if (darkTheme) Dark else Light, content = content)
 }
+
+@Composable
+fun PruneThemeFromPref(theme: String, content: @Composable ()->Unit) {
+    val dark = when (theme) {
+        "light" -> false
+        "dark" -> true
+        else -> isSystemInDarkTheme()
+    }
+    PruneTheme(darkTheme = dark, content = content)
+}
