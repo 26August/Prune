@@ -24,10 +24,13 @@ fun HistoryScreen() {
         if (msg.isNotBlank()) Text(msg, style = MaterialTheme.typography.bodySmall)
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.weight(1f)) {
             items(AppState.history) { h ->
-                Card {
+                val restorable = h.lines.filter { it.status == ExecStatus.OK }.map { it.pkg }.distinct()
+                val isDryRun = h.lines.any { it.status == ExecStatus.DRY } && restorable.isEmpty()
+                Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(h.ts, style = MaterialTheme.typography.titleSmall)
-                        Text("Action: ${h.action}  total=${h.summary?.total ?: h.lines.size} ok=${h.summary?.ok ?: 0} fail=${h.summary?.fail ?: 0} skip=${h.summary?.skip ?: 0}", style = MaterialTheme.typography.bodySmall)
+                        if (isDryRun) Text("Dry-run: no changes were made", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.tertiary)
+                        Text("Action: ${h.action}  total=${h.summary?.total ?: h.lines.size} ok=${h.summary?.ok ?: 0} fail=${h.summary?.fail ?: 0} skip=${h.summary?.skip ?: 0} dry=${h.summary?.dry ?: h.lines.count { it.status == ExecStatus.DRY }}", style = MaterialTheme.typography.bodySmall)
                         h.lines.take(40).forEach { l ->
                             val color = when (l.status) {
                                 ExecStatus.OK -> MaterialTheme.colorScheme.primary
@@ -39,11 +42,10 @@ fun HistoryScreen() {
                             Text("${l.status}|${l.pkg}|${l.msg}", style = MaterialTheme.typography.bodySmall, color = color)
                         }
                         if (h.lines.size > 40) Text("... and ${h.lines.size - 40} more", style = MaterialTheme.typography.bodySmall)
-                        Button(
+                        if (!isDryRun && restorable.isNotEmpty()) Button(
                             enabled = !running,
                             onClick = {
-                                val pkgs = h.lines.filter { it.status == ExecStatus.OK || it.status == ExecStatus.FAIL }.map { it.pkg }.distinct()
-                                if (pkgs.isEmpty()) { msg = "Nothing to restore"; return@Button }
+                                val pkgs = restorable
                                 running = true; msg = "Restoring ${pkgs.size} package(s)..."
                                 scope.launch(Dispatchers.IO) {
                                     val lines = mutableListOf<String>()

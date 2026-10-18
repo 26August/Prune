@@ -17,6 +17,7 @@ fun PackageListScreen(onExecute: ()->Unit) {
     var tab by remember { mutableStateOf(0) }
     var profile by remember { mutableStateOf(Profile.Custom) }
     val showCaution = remember { mutableStateOf(false) }
+    var showRemoved by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         val s = SettingsStore(ctx)
         s.flow.collect { showCaution.value = it.showCaution }
@@ -25,7 +26,7 @@ fun PackageListScreen(onExecute: ()->Unit) {
     val curLevel = levels[tab]
     val filtered = AppState.matched.filter { e ->
         val status = AppState.scanMap[e.id]
-        status != null && (query.isBlank() || e.id.contains(query, true) || e.name.contains(query, true)) && e.level == curLevel
+        status != null && (showRemoved || status != PackageStatus.uninstalled) && (query.isBlank() || e.id.contains(query, true) || e.name.contains(query, true)) && e.level == curLevel
     }.let { list ->
         if (curLevel == "caution" && !showCaution.value) emptyList() else list
     }
@@ -46,6 +47,7 @@ fun PackageListScreen(onExecute: ()->Unit) {
             FilterChip(selected=profile==Profile.Safe, onClick={applyProfile(Profile.Safe)}, label={Text("Safe")})
             FilterChip(selected=profile==Profile.Aggressive, onClick={applyProfile(Profile.Aggressive)}, label={Text("Aggressive")})
             FilterChip(selected=profile==Profile.Custom, onClick={applyProfile(Profile.Custom)}, label={Text("Custom")})
+            FilterChip(selected=showRemoved, onClick={showRemoved=!showRemoved}, label={Text("Show removed")})
         }
         TabRow(selectedTabIndex=tab) {
             Tab(selected=tab==0, onClick={tab=0}, text={Text("Safe")})
@@ -57,7 +59,7 @@ fun PackageListScreen(onExecute: ()->Unit) {
         }
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             TextButton(onClick={
-                val ids = filtered.map{it.id}.toSet()
+                val ids = filtered.filter { AppState.scanMap[it.id] != PackageStatus.uninstalled }.map{it.id}.toSet()
                 AppState.selected = AppState.selected + ids
             }){Text("Select all")}
             TextButton(onClick={
@@ -78,7 +80,7 @@ fun PackageListScreen(onExecute: ()->Unit) {
                             Text(e.id, style=MaterialTheme.typography.bodySmall)
                             AssistChip(onClick={}, label={Text("${e.level} · $st")})
                         }
-                        Checkbox(checked=checked, onCheckedChange={ c ->
+                        Checkbox(checked=checked, enabled=st != PackageStatus.uninstalled, onCheckedChange={ c ->
                             AppState.selected = if(c) AppState.selected + e.id else AppState.selected - e.id
                         })
                     }

@@ -33,6 +33,7 @@ object AppState {
             val m = repo.matchedFor(info, override)
             withContext(Dispatchers.Main) {
                 deviceInfo = info; scanMap = scan; matched = m; loading = false
+                selected = selected.filter { scan[it] != PackageStatus.uninstalled }.toSet()
             }
             refreshHistory(ctx)
         }

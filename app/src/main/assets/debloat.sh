@@ -135,7 +135,7 @@ do_scan() {
 }
 
 process_list() {
-  total=0; ok=0; fail=0; skip=0
+  total=0; ok=0; fail=0; skip=0; dry=0
   require_root
   if [ -z "$LIST_FILE" ] || [ ! -f "$LIST_FILE" ]; then
     echo "FAIL|args|missing --list file"
@@ -182,7 +182,7 @@ process_list() {
           else log_line "DRY|$pkg|pm uninstall -k --user 0 $pkg"; fi ;;
         restore) log_line "DRY|$pkg|pm enable $pkg; cmd package install-existing --user 0 $pkg" ;;
       esac
-      ok=$((ok+1))
+      dry=$((dry+1))
       continue
     fi
 
@@ -209,7 +209,7 @@ process_list() {
     esac
   done < "$LIST_FILE"
 
-  log_line "DONE|$total|$ok|$fail|$skip"
+  log_line "DONE|$total|$ok|$fail|$skip|$dry"
   if [ "$fail" -gt 0 ]; then exit 1; else exit 0; fi
 }
 

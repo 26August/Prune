@@ -40,7 +40,10 @@ fun ExecuteScreen() {
         AppState.logLines = emptyList()
         scope.launch(Dispatchers.IO) {
             val actStr = when(action) { DefaultAction.disable->"disable"; DefaultAction.uninstall->"uninstall" }
+            val okPkgs = java.util.Collections.synchronizedList(mutableListOf<String>())
+            val wasDry = dry
             val code = RootExecutor.run(ctx, actStr, selected, dry, wipe) { line ->
+                ShellContract.parseLine(line)?.let { if (it.status == ExecStatus.OK) okPkgs += it.pkg }
                 scope.launch(Dispatchers.Main) {
                     log = log + line
                     AppState.logLines = log
@@ -49,6 +52,7 @@ fun ExecuteScreen() {
             }
             withContext(Dispatchers.Main) {
                 running = false
+                if (!wasDry) AppState.selected = AppState.selected - okPkgs.toSet()
                 AppState.refreshHistory(ctx)
                 AppState.refresh(ctx)
             }
@@ -74,7 +78,7 @@ fun ExecuteScreen() {
             Text(if(running) "Running..." else if(dry) "Dry-run" else "Confirm & Run")
         }
         if (running) LinearProgressIndicator(Modifier.fillMaxWidth())
-        summary?.let { Text("DONE ${it.total} ok=${it.ok} fail=${it.fail} skip=${it.skip}", style=MaterialTheme.typography.bodySmall) }
+        summary?.let { Text("DONE ${it.total} ok=${it.ok} fail=${it.fail} skip=${it.skip} dry=${it.dry}", style=MaterialTheme.typography.bodySmall) }
         LazyColumn(Modifier.weight(1f).fillMaxWidth(), verticalArrangement=Arrangement.spacedBy(2.dp)) {
             items(log) { l ->
                 val c = when {

@@ -19,5 +19,5 @@ data class DenylistFile(val schemaVersion: Int = 1, val group: String = "denylis
 data class DeviceInfo(val brand: String="", val manufacturer: String="", val model: String="", val android: String="", val sdk: String="", val rootProvider: String="Unknown")
 data class ScannedPackage(val entry: PackageEntry, val status: PackageStatus)
 data class ExecLine(val status: ExecStatus, val pkg: String, val msg: String)
-data class ExecSummary(val total: Int, val ok: Int, val fail: Int, val skip: Int)
+data class ExecSummary(val total: Int, val ok: Int, val fail: Int, val skip: Int, val dry: Int = 0)
 data class HistoryEntry(val ts: String, val action: String, val lines: List<ExecLine>, val summary: ExecSummary?)

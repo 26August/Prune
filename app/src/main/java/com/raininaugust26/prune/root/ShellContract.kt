@@ -19,7 +19,7 @@ object ShellContract {
     fun parseDone(raw: String): ExecSummary? {
         val c = raw.trim().split("|")
         if (c.size < 5 || c[0] != "DONE") return null
-        return ExecSummary(c[1].toIntOrNull()?:0, c[2].toIntOrNull()?:0, c[3].toIntOrNull()?:0, c[4].toIntOrNull()?:0)
+        return ExecSummary(c[1].toIntOrNull()?:0, c[2].toIntOrNull()?:0, c[3].toIntOrNull()?:0, c[4].toIntOrNull()?:0, c.getOrNull(5)?.trim()?.toIntOrNull() ?: 0)
     }
     fun mapStatus(s: String): PackageStatus = when(s.lowercase().trim()) {
         "installed" -> PackageStatus.installed

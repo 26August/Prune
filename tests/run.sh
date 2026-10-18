@@ -87,9 +87,10 @@ assert_contains "scan disabled" "$TMP/out.txt" "disabled"
 
 echo "== test disable dry-run =="
 printf "com.example.installed1\ncom.miui.msa.global\n" > "$list"
-sh "$SH" disable --list "$list" --workdir "$TMP/work" --dry-run > "$TMP/out.txt" 2>&1
+ sh "$SH" disable --list "$list" --workdir "$TMP/work" --dry-run > "$TMP/out.txt" 2>&1
 assert_contains "dry-run ok" "$TMP/out.txt" "DRY|com.example.installed1|"
 assert_contains "dry-run done" "$TMP/out.txt" "DONE|"
+assert_contains "dry-run not counted as ok" "$TMP/out.txt" "DONE|2|0|0|0|2"
 
 echo "== test denylist blocked =="
 printf "com.android.systemui\ncom.android.providers.telephony\ncom.example.installed1\n" > "$list"
