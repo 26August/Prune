@@ -108,18 +108,12 @@ do_info() {
 }
 
 do_scan() {
-  installed="$(pm list packages --user 0 2>/dev/null | sed 's/^package://' | sort || true)"
-  disabled="$(pm list packages -d --user 0 2>/dev/null | sed 's/^package://' | sort || true)"
-  uninstalled="$(pm list packages -u --user 0 2>/dev/null | sed 's/^package://' | sort || true)"
-
   tmp_all="$(mktemp 2>/dev/null || echo /data/local/tmp/prune_scan_all.$$)"
   tmp_dis="$(mktemp 2>/dev/null || echo /data/local/tmp/prune_scan_dis.$$)"
-  tmp_uni="$(mktemp 2>/dev/null || echo /data/local/tmp/prune_scan_uni.$$)"
   tmp_inst="$(mktemp 2>/dev/null || echo /data/local/tmp/prune_scan_inst.$$)"
-  printf '%s\n' "$uninstalled" > "$tmp_all"
-  printf '%s\n' "$disabled" > "$tmp_dis"
-  printf '%s\n' "$installed" > "$tmp_inst"
-
+  pm list packages --user 0 2>/dev/null | sed 's/^package://' | sort > "$tmp_inst" 2>/dev/null || : > "$tmp_inst"
+  pm list packages -d --user 0 2>/dev/null | sed 's/^package://' | sort > "$tmp_dis" 2>/dev/null || : > "$tmp_dis"
+  pm list packages -u --user 0 2>/dev/null | sed 's/^package://' | sort > "$tmp_all" 2>/dev/null || : > "$tmp_all"
   sort -u "$tmp_all" 2>/dev/null | while IFS= read -r pkg || [ -n "$pkg" ]; do
     [ -z "$pkg" ] && continue
     if grep -qxF "$pkg" "$tmp_dis" 2>/dev/null; then
@@ -130,7 +124,7 @@ do_scan() {
       log_line "INFO|$pkg|uninstalled"
     fi
   done
-  rm -f "$tmp_all" "$tmp_dis" "$tmp_uni" "$tmp_inst" 2>/dev/null || true
+  rm -f "$tmp_all" "$tmp_dis" "$tmp_inst" 2>/dev/null || true
   log_line "DONE|0|0|0|0"
 }
 
