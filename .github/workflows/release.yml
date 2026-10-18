@@ -1,0 +1,95 @@
+name: Release APK
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag for release (e.g. v0.1.0) — used as release name when run manually'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON and shell
+        run: |
+          for f in app/src/main/assets/packages/*.json; do
+            echo "Checking $f"
+            python3 -m json.tool "$f" > /dev/null
+          done
+          sh -n app/src/main/assets/debloat.sh
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          shellcheck --shell=sh app/src/main/assets/debloat.sh
+
+      - name: Shell tests
+        run: sh tests/run.sh
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build release APK (com.raininaugust26.prune)
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            KEYSTORE_PATH="$RUNNER_TEMP/release.jks" ./gradlew assembleRelease
+          else
+            echo "::warning::No KEYSTORE_BASE64 secret — building unsigned release APK"
+            ./gradlew assembleRelease
+          fi
+          ls -lh app/build/outputs/apk/release/
+          aapt dump badging app/build/outputs/apk/release/*.apk 2>/dev/null | grep "package: name" || true
+
+      - name: Rename APK for release
+        run: |
+          TAG="${{ github.ref_name }}"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            TAG="${{ inputs.tag_name }}"
+            [ -z "$TAG" ] && TAG="manual-$(date +%Y%m%d-%H%M%S)"
+          fi
+          APK=$(ls app/build/outputs/apk/release/*.apk | head -n 1)
+          cp "$APK" "prune-${TAG}.apk"
+          echo "APK_TAG=${TAG}" >> "$GITHUB_ENV"
+          ls -lh prune-*.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prune-${{ env.APK_TAG }}-apk
+          path: prune-*.apk
+          if-no-files-found: error
+
+      - name: Publish to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: prune-*.apk
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+
+      - name: Publish manual release
+        if: github.event_name == 'workflow_dispatch' && inputs.tag_name != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag_name }}
+          files: prune-*.apk
+          fail_on_unmatched_files: true
+          generate_release_notes: true
